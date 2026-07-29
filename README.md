@@ -36,9 +36,9 @@ R script functionaity:
 ######################
 
 Karyplot - generation of expression graph plots, based on annotations from the jackson gff file and normalised bedgraph files
-Proportional venn - generation of venn diagram based on known data using Eulerr
+Proportional_venn - generation of venn diagram based on known data using Eulerr
 t.vivax_expression_data_analysis - majority of data analysis and figure generation. Contains gene count normalisation, PCA analysis and MA/ MM score calculation and plotting
-VSG HMM overlap plotter - generation of venn diagram based on overlap of HMMsearch output lists and annotated genes using Eulerr
+VSG_HMM_overlap_plotter - generation of venn diagram based on overlap of HMMsearch output lists and annotated genes using Eulerr
 
 #################
 Additional files:
