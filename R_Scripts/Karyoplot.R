@@ -13,7 +13,7 @@
   library(plyranges)
   library(GenomeInfoDb)
 }
- 
+
 
 # Read in .fai index file 
 tryp_fai <- read.table("C:/Users/oscar/Downloads/Trypanosome_MSc_project/TvY486_LIV26.fasta.fai", sep="\t", stringsAsFactors=FALSE)

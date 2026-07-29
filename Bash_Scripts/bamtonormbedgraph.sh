@@ -13,6 +13,7 @@
 source $HOME/.bash_profile
 conda activate trypanosomes
 
+# read in unique reads, then generate normalised bedgraph from the data
 for i in STAR_results/tryp_align/*unique.bam
 do
 	echo "starting alignment of sample ${i}"

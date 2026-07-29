@@ -16,6 +16,6 @@ conda activate trypanosomes
 
 cd data
 
-#bedtools sort -i AJ_cow_TvSM_combined.gtf > AJ_cow_TvSM_combined.sorted.gtf
-#bgzip AJ_cow_TvSM_combined.sorted.gtf
+bedtools sort -i AJ_cow_TvSM_combined.gtf > AJ_cow_TvSM_combined.sorted.gtf
+bgzip AJ_cow_TvSM_combined.sorted.gtf
 tabix -p gff AJ_cow_TvSM_combined.sorted.gtf.gz
