@@ -99,7 +99,7 @@ Generated bedgraph files from sam files, and used these to visualize read count 
 10.06.2026
 Generated MA plots from the TvSM and ND1 samples.
 BLASTed USP1 FASTA file against the AJ assembly to identify associated gene.
-TvY486_LIV26_0037470 on scaffold 3a identified as exact match.
+TvY486_LIV26_0037470 on scaffold 3a identified as exact match, one other very close match on scaffold 3.
 
 11.06.2026
 Mapped scaffold 3a bedgraphs against AJ assembly and gtf. Clear expression peaks identified on gene 0037470 for the TvSM samples, relative to the ND1 samples.
