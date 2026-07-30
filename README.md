@@ -45,3 +45,4 @@ Additional files:
 #################
 
 trypanosomes.yml - an export of the conda environment used in the project, containing all of the modules used in the bash scripts
+masters_lab_book.txt - a log of experimental work, including failed methodologies

@@ -1,0 +1,181 @@
+Bill Wickstead lab book
+
+05.05.2026 
+Coding club – focussed on RNA-seq
+Thursday – look at RNA-seq data and decide what to do with it
+Pulled CDs from .fasta files for all 3 assemblies
+Translated CDs to proteins
+Compared orthologs of protein datasets using sonicparanoid
+
+Check whether orthologue clusters contain orphaned paralogue sets – table does not, orthovenn3 dataset seems to. Pulled orphaned (non overlapping) clusters from orthovenn3
+Venn diagram showing protein sequences assigned to clusters in each dataset – done with orthovenn3
+Circos for possible circular alignment comparison – done with LAST
+Pull out VSG descriptions from AJ CDS gff file – 2589 sequences in total, made into lookup excel table
+PFam vsg prediction model – a and b type. HMM scan done, approx. 350 sequences identified as matches 
+Blast RNA binding proteins from brucei to identify which cluster matches in AJ dataset, RBP 6 and 10
+Rerun sonicparanoid of AJ vs T. brucei TB927 (reference) – done, need to figure out a way to pull out orphaned paralogues
+
+07.05.2026
+Proportional venn format, use othovenn3 numbers – done in R, doesn’t show old/tritryp overlap
+Repeat VSG prediction – use HMMsearch rather than HMMscan – done 
+Tried to make LAST visualisation clearer, doesn’t seem to be any built in tools.
+
+Coding club
+Vivax grown in the presence of bovine cells, will lead to mRNA from both sources. Use STAR to compare with bovine genome and exclude
+Decide on a naming system, create symbolic links between files 
+Log onto zoot with lab account and password
+Run Fastqc, trim for quality, adapters don’t matter – trimgalore
+Map trimmed reads to chosen genome assembly using bowtie2
+Keep files gzipped, size is limited
+Old bovine genome from Ensembl, have a look for a new one – ideally long read but may not exist – most used seems to be ARS-UCD2.0
+Zoot password = WikiLab12
+
+08.05.2026
+Performed domain search for RNA binding proteins using ALBA3, CCCH, RRM and Pumilio .hmm files. Output results into combined file
+
+18.05.2026
+Transferred files from zoot over to ada
+Fixed proportional venn diagram to show all sections
+
+19.05.2026
+Ran fastqc analysis on read data, data is very high quality and seems to have been trimmed already
+Generated bowtie index using a combination of the AJ tryp assembly and the bovine assembly
+
+20.05.2026
+Ran bowtie2 alignment of RNA-seq data with the combined genome index
+
+21.05.2026
+Alignment complete, 460 GB in total
+
+Coding club
+Read alignment cannot differentiate between paralogues – assigns them randomly by default
+Preference for SAM files
+EdgeR for expression data comparison
+AJ gff file is in gff3 format
+
+Rerun alignment in star, can handle exon gaps better for the cow genome.
+Converted AJ gff file into gtf using gffread, then used cat to combine AJ and cow gtf files
+
+22.05.2026
+Generated STAR index from cow and AJ fasta + GTF files
+
+26.05.2026
+Reran star alignment on both directional datasets separately, otherwise temp files were too large for ada
+Converted generated bam files into sam files
+
+28.05.2026 
+Second bam file has corrupted, rerunning
+
+Coding club
+Exogenous genetic material has been added to trypanosomes, could be added to the combined fasta files to aid in mapping. Convert associated genbank file to gff/ gtf
+Star will output read count files if told to, can be told to exclude reads with a low mapq score
+Mapq score tells you a measure of how often a read could map elsewhere. Given as a log value. Repeats will give very low scores.
+Htseq does not need sorted files so long as you output as a sam file.
+edgeR, load, normalise, fit model, use model to give log fold change. Do this locally.
+Nice tutorial for edgeR on biorender. Do pairwise comparisons rather than comparing the entire dataset.
+Sample table and design matrix can be used in the comparison of expression.
+
+29.05.2026
+Added additional fasta and gtf files to combined dataset, ran STAR alignment.
+
+01.06.2026 
+STAR alignment finished running, failed to map 95% of reads due to issues with the gtf and fasta files. Rerun with fixed gtf and fasta files.
+
+03.06.2026
+Reran star alignment on each individual file set due to difficulties in parsing samples from sam file. Read counts output still indicates high number of unmapped reads
+Samples 29 – 37 are not for the vivax dataset, they are for Cats data.
+Genes to grep for sense checking: RBP-6 and RBP-10.
+
+05.06.2026
+Calculated differential expression between samples, using edgeR. Generated PCA plots for the full dataset, rbp experimental dataset and vsg experimental dataset. In the vsg dataset, most differentially expressed genes seem to be VSGs, need to pull out most expressed genes for each of the samples using TPM to confirm.
+
+08.06.2026
+Pull out VSG genome with annotations. Create mini gtf file for 5 genes up and downstream of the expressed VSG. Create a bed graph for the region. Generate x/y and m/a graphs for the expression profile of the TvSM samples vs the ND1 samples, and of the ND1 samples compared to one another. 
+Indexed and pulled read info from the files for IGV visualisation. 
+
+09.06.2026
+Generated bedgraph files from sam files, and used these to visualize read count for different areas of scaffold 10. 
+
+10.06.2026
+Generated MA plots from the TvSM and ND1 samples.
+BLASTed USP1 FASTA file against the AJ assembly to identify associated gene.
+TvY486_LIV26_0037470 on scaffold 3a identified as exact match.
+
+11.06.2026
+Mapped scaffold 3a bedgraphs against AJ assembly and gtf. Clear expression peaks identified on gene 0037470 for the TvSM samples, relative to the ND1 samples.
+STAR mapping allowing for too large of a gap between mates, since RNA fragment size is meant to cap out ~600bp, max mate distance was changed to 800bp.
+
+12.06.2026
+Reran STAR alignment, using parameters to exclude automatically identified splice junctions. Still failed to fix the issue
+
+15.06.2026
+Indexed bam files for scaffold 10 and imported into igv to view where reads were mapping.
+Restart mapping, map to cow reads first, pull unmapped reads from SAM file, map against tryp genome.
+
+16.06.2026
+New mapping outputs show much clearer peaks within the bedgraph, with an expected 3’ bias associated with the reads, going into the UTR. Unclear why reads show clear mapping bias to one specific vsg.
+
+17.06.2026 
+Pulled out sequences for each of the vsg homologues and aligned them against each other using MUSCLE. Also indexed and loaded up bam file in IGV to visualize read placement. Still unclear why alignment strongly favours this specific gene.
+
+18.06.2026
+Bill believes individual gene expression is likely explanation for large peak. Gene may be transposed into a separate expression site, rather than the theory of full chromosomal expression. Expression location is based on A Jackson assembly, which was taken from insect forms. Next phase will involve gene assembly of Majeed’s clones, to determine whether the highly expressed gene has moved.
+
+19.06.2026
+Started star alignment of Andrew Jackson samples to run over the weekend
+
+22.06.2026
+Alignment failed multiple times at random points. Remade script to load up genome index once at the start, then use this for mapping all the samples. Should speed up the process significantly. 
+
+24.06.2026
+ADA computing nodes down and unable to run any scripts. Karyoploter can be used to generate high quality genome plots in R. 71090 is not found in either the VSG_A or VSG_B HMM search files. Labelled as VSG_P54_F25 in the Andrew Jackson documentation. 
+
+25.06.2026
+On MA plot, highlight vsg identified proteins and USP1. Create second MA plot with RNA binding proteins highlighted. Create venn diagram showing overlap between Andrew Jackson VSG list, and the hmm lists of identified VSG-A and VSG-B genes. Chromosome mapping of expression for both chromosomes 10 and USP1. Bill will bash together a de novo assembly to try and determine whether VSG expression results from a single transcript. Will need to rerun RBP overexpression samples and remap them against the genome. Plot M for VSG expression against M for RBP expression. Multi panel, RBP 6/10 against surface proteins (VSG and USP1). Do not need bedgraphs for RBP dataset. Produce a nicer looking PCA to a publication quality – coloured groups etc. MA plot showing how overexpression of surface protein affects transcriptomic profile. Heatmap showing how RBP expression changes between samples for the surface overexpression. Table for the assembly data stats and inparanoid analysis. Use e value of 10^-2 as cutoff for VSG identification.
+Output files in the form of SVGs, as these are easier to modify.
+description=RNA-binding protein RBP10,  putative;gene=TvY486_LIV26_0039900
+description=RNA-binding protein RBP6,  putative;gene=TvY486_LIV26_0032910
+Both detected by HMMsearch as possessing RNA recognition motif 1.
+
+28.06.2026
+Ada back online last thing Friday. Sorted produced bam files. Pulled gene count tables.
+
+29.06.2026
+Remove titles from plots, use titles in writeup legend instead. Rename assemblies to TriTrypDB, Jackson and Abbas, in addition to the year. Give a legend which differentiates the colours more easily. VSG_jackson > Jackson annotation VSG. 
+Plot contig number and length, using sqrt on the x axis to make it more easily legible. 
+Have another crack at making the LAST plots legible at publication scale.
+MA plot background, use black lines for axes and white space for background. Red on gray works well for highlighting specific points. Scale all y axes to the same limit, in order to highlight limited difference between ND1 samples
+Look up which point character in R is a filled circle
+
+01.07.2026
+Completed mapping of TvSM samples to the tryp genome. Plotted pca with normalised samples.
+
+02.07.2026
+Created genome expression map using karyoploteR. Cytoband colour can be altered, but requires the editing of giestain column in the metadata
+
+06.07.2026
+Created heatmaps for the samples based on all of their genes, VSG genes and RNA associated genes. Editing metadata still proving awkward.
+
+07.07.2026
+Successfully changed giestain metadata based on gene strandedness. Works on zoomed in samples, but not on full chromosomes due to black border making all components appear black.
+
+08.07.2026
+Log scale on expression data benefits from having breakpoints to make it easier to see where the scale changes. See if you can fix colour on the expression peaks to remove the border, currently looks like it means something.
+Check BSF1 dataset, something is off.
+Heat map, one showing average expression of each gene in a single column, and one heatmap showing the read counts, normalised against those average expressions. Basically abundance vs log fold change
+For RBP, look at 0h, 24, AJ, ND1, TvsM
+For VSG, look at 0h, 48h and TvsM.
+Check out pheatmap, nicer default colour pallet 
+MM plots based on ND1 vs TvsM/ Induced 0h vs Induced 48h, ND1 vs TvsM/ EPI vs BSF.
+
+13.07.2026
+71090 folds similar to T brucei vsg221. Has a different C terminus, may be a result of limited data on T. vivax VSGs.
+Currently attempting to generate single marker line.
+Next steps: transgenesis in ND1, purification of HMW (long read) gDNA, pulse field gel analysis of HMW gDNA and ONT sequencing.
+
+20.07.2026
+SS1 locus used for insertion of RBP6 and 10. Silent region identified from Abbas. Original TvSM line created by inserting cassette into tubulin region using homologous recombination. APE software used to visualise genbank files. UR081 is SS1 just renamed. Hygomyacin used for selection in tryps.
+
+24.07.2026
+Y486 – IL1392 – TvSM
+Inserted T7 polymerase and repressor into IL1392 to create TvSM, which allows for overexpression.
